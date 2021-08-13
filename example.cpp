@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 
   engine->addImageProvider(QStringLiteral("svg"), new SVGImageProvider);
 
-  QQmlComponent c(engine.get(), QStringLiteral("qrc:///Main.qml"));
+  QQmlComponent c(engine.get(), QStringLiteral(":/Main.qml"));
 
   if (auto const obj(c.create()); obj)
   {
