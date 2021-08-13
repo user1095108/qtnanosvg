@@ -1,8 +1,6 @@
 #include <QtQml>
 #include <QtQuick>
 
-#include <ranges>
-
 #include "svgimageprovider.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -25,8 +23,7 @@ int main(int argc, char* argv[])
   }
   else
   {
-    std::ranges::for_each(c.errors(),
-      [](auto& e){qWarning() << e.toString();});
+    qDebug() << c.errors();
   }
 
   return EXIT_FAILURE;
