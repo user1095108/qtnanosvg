@@ -15,16 +15,9 @@ int main(int argc, char* argv[])
 
   engine->addImageProvider(QStringLiteral("svg"), new SVGImageProvider);
 
-  QQmlComponent c(engine.get(), QStringLiteral(":/Main.qml"));
+  QQmlComponent c(engine.get(), QStringLiteral("qrc:///Main.qml"));
 
-  if (auto const obj(c.create()); obj)
-  {
-    return app.exec();
-  }
-  else
-  {
-    qDebug() << c.errors();
-  }
+  auto const obj(c.create());
 
-  return EXIT_FAILURE;
+  return obj ? app.exec() : (qDebug() << c.errors(), EXIT_FAILURE);
 }
