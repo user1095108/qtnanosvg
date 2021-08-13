@@ -302,11 +302,9 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
 
     p->scale(sm, sm);
 
-    p->translate(qreal(.5) * (w - sm * image->width),
-      qreal(.5) * (h - sm * image->height));
+    p->translate(x + qreal(.5) * (w - sm * image->width),
+      y + qreal(.5) * (h - sm * image->height));
   }
-
-  p->translate(x, y);
 
   // draw shapes
   for (auto shape(image->shapes); shape; shape = shape->next)
