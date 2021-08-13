@@ -299,15 +299,18 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
 {
   p->save();
 
-  p->translate(x, y);
-
   // preserve aspect ratio
   if (w && h)
   {
     auto const sm(std::min(w / image->width, h / image->height));
 
     p->scale(sm, sm);
+
+    p->translate(qreal(.5) * (w - sm * image->width),
+      qreal(.5) * (h - sm * image->height));
   }
+
+  p->translate(x, y);
 
   // draw shapes
   for (auto shape(image->shapes); shape; shape = shape->next)
