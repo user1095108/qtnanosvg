@@ -17,7 +17,5 @@ int main(int argc, char* argv[])
 
   QQmlComponent c(engine.get(), QStringLiteral("qrc:///Main.qml"));
 
-  auto const obj(c.create());
-
-  return obj ? app.exec() : (qDebug() << c.errors(), EXIT_FAILURE);
+  return c.create() ? app.exec() : (qDebug() << c.errors(), EXIT_FAILURE);
 }
