@@ -273,8 +273,6 @@ void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
   qreal const w, qreal const h)
 {
-  p->save();
-
   // preserve aspect ratio
   {
     auto const sm(std::min(w / image->width, h / image->height));
@@ -293,6 +291,4 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
       drawSVGShape(p, shape);
     }
   }
-
-  p->restore();
 }
