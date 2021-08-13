@@ -286,10 +286,7 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
   // draw shapes
   for (auto shape(image->shapes); shape; shape = shape->next)
   {
-    if (NSVG_FLAGS_VISIBLE & shape->flags)
-    {
-      drawSVGShape(p, shape);
-    }
+    drawSVGShape(p, shape);
   }
 }
 
