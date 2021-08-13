@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<RCC version="1.0">
+    <qresource>
+        <file alias="tick.svg">tick.svg</file>
+        <file alias="cross.svg">cross.svg</file>
+        <file alias="tiger.svg">tiger.svg</file>
+        <file alias="Main.qml">Main.qml</file>
+    </qresource>
+</RCC>

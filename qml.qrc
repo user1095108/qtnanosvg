@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+  <file>tick.svg</file>
+  <file>cross.svg</file>
+  <file>tiger.svg</file>
+  <file>Main.qml</file>
+</qresource>
+</RCC>
