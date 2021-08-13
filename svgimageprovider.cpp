@@ -20,12 +20,11 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* sz,
   QPixmap pixmap(*sz = rs);
 
   //
-  QByteArray ba;
-
   if (QFile f(id); !rs.isEmpty() && f.open(QIODevice::ReadOnly))
   {
     if (auto const sz(f.size()); sz)
     {
+      QByteArray ba;
       ba.resize(sz + 1);
 
       if (sz == f.read(ba.data(), sz))
