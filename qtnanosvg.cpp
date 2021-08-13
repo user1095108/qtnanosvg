@@ -300,7 +300,6 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
   p->save();
 
   // preserve aspect ratio
-  if (w && h)
   {
     auto const sm(std::min(w / image->width, h / image->height));
 
