@@ -292,3 +292,30 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
     }
   }
 }
+//////////////////////////////////////////////////////////////////////////////
+void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
+  qreal const x, qreal const y, qreal const w, qreal const h)
+{
+  p->save();
+
+  p->translate(x, y);
+
+  // preserve aspect ratio
+  if (w && h)
+  {
+    auto const sm(std::min(w / image->width, h / image->height));
+
+    p->scale(sm, sm);
+  }
+
+  // draw shapes
+  for (auto shape(image->shapes); shape; shape = shape->next)
+  {
+    if (NSVG_FLAGS_VISIBLE & shape->flags)
+    {
+      drawSVGShape(p, shape);
+    }
+  }
+
+  p->restore();
+}
