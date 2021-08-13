@@ -292,6 +292,7 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
     }
   }
 }
+
 //////////////////////////////////////////////////////////////////////////////
 void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
   qreal const x, qreal const y, qreal const w, qreal const h)
