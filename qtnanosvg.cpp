@@ -41,7 +41,7 @@ inline auto inverse(float const* const t) noexcept
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
+inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 {
   QPainterPath qpath;
 
