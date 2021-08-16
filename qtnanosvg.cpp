@@ -4,7 +4,6 @@
 #include <QRadialGradient>
 
 #include <cassert>
-#include <cstdint>
 #include <cmath>
 
 #include <iterator>
@@ -20,11 +19,11 @@
 //////////////////////////////////////////////////////////////////////////////
 inline auto to_rgba(unsigned int const c) noexcept
 {
-  return std::array<std::uint8_t, 4>{
-    static_cast<std::uint8_t>(c),
-    static_cast<std::uint8_t>(c >> 8),
-    static_cast<std::uint8_t>(c >> 16),
-    static_cast<std::uint8_t>(c >> 24)
+  return std::array<quint8, 4>{
+    static_cast<quint8>(c),
+    static_cast<quint8>(c >> 8),
+    static_cast<quint8>(c >> 16),
+    static_cast<quint8>(c >> 24)
   };
 }
 
