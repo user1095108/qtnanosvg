@@ -3,11 +3,6 @@
 #include <QLinearGradient>
 #include <QRadialGradient>
 
-#include <cassert>
-#include <cmath>
-
-#include <iterator>
-
 #include <array>
 
 #define NANOSVG_ALL_COLOR_KEYWORDS
@@ -88,7 +83,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
           break;
 
         default:
-          assert(0);
+          Q_ASSERT(0);
       }
 
       auto const fillWithGradient([&](QGradient& gr)
@@ -113,7 +108,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
               break;
 
             default:
-              assert(0);
+              Q_ASSERT(0);
           }
 
           {
@@ -125,7 +120,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 
               auto const c(to_rgba(stop.color));
               gr.setColorAt(stop.offset,
-                QColor(c[0], c[1], c[2], std::round(shape->opacity * c[3])));
+                QColor(c[0], c[1], c[2], qRound(shape->opacity * c[3])));
             }
           }
 
@@ -139,7 +134,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
           {
             auto const c(to_rgba(shape->fill.color));
             p->fillPath(qpath,
-              QColor(c[0], c[1], c[2], std::round(shape->opacity * c[3])));
+              QColor(c[0], c[1], c[2], qRound(shape->opacity * c[3])));
 
             break;
           }
@@ -179,14 +174,14 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
           }
 
         default:
-          assert(0);
+          Q_ASSERT(0);
       }
 
       break;
     }
 
     default:
-      assert(0);
+      Q_ASSERT(0);
   }
 
   // stroke
@@ -199,20 +194,15 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
       {
         auto const c(to_rgba(shape->stroke.color));
 
-        QPen pen(QColor(c[0], c[1], c[2], std::round(shape->opacity * c[3])));
+        QPen pen(QColor(c[0], c[1], c[2], qRound(shape->opacity * c[3])));
 
         pen.setWidthF(shape->strokeWidth);
 
         if (auto const count(shape->strokeDashCount); count)
         {
-          QVector<qreal> dashes;
-          dashes.reserve(count);
-
-          std::copy(shape->strokeDashArray, shape->strokeDashArray + count,
-            std::back_inserter(dashes));
-
-          pen.setDashPattern(dashes);
           pen.setDashOffset(shape->strokeDashOffset);
+          pen.setDashPattern(QVector<qreal>(shape->strokeDashArray,
+            shape->strokeDashArray + count));
         }
 
         switch (shape->strokeLineCap)
@@ -233,7 +223,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
             break;
 
           default:
-            assert(0);
+            Q_ASSERT(0);
         }
 
         switch (shape->strokeLineJoin)
@@ -255,7 +245,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
             break;
 
           default:
-            assert(0);
+            Q_ASSERT(0);
         }
 
         p->strokePath(qpath, pen);
@@ -264,7 +254,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
       }
 
     default:
-      assert(0);
+      Q_ASSERT(0);
   }
 }
 
@@ -274,7 +264,7 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
 {
   // preserve aspect ratio
   {
-    auto const sm(std::min(w / image->width, h / image->height));
+    auto const sm(qMin(w / image->width, h / image->height));
 
     p->scale(sm, sm);
 
@@ -297,7 +287,7 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
 
   // preserve aspect ratio
   {
-    auto const sm(std::min(w / image->width, h / image->height));
+    auto const sm(qMin(w / image->width, h / image->height));
 
     p->scale(sm, sm);
 
