@@ -10,8 +10,6 @@ int main(int argc, char* argv[])
 
   //
   QScopedPointer<QQmlEngine> engine(new QQmlEngine);
-  QObject::connect(engine.get(), &QQmlEngine::quit, &app,
-    &QCoreApplication::quit);
 
   engine->addImageProvider(QStringLiteral("svg"), new SVGImageProvider);
 
