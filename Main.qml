@@ -24,6 +24,14 @@ ApplicationWindow {
     spacing: 5
 
     Button {
+      icon.source: "image://svg/:/tiger.svg"
+
+      text: "Ignore"
+
+      onClicked: window.close()
+    }
+
+    Button {
       icon.source: "image://svg/:/tick.svg"
 
       text: "OK"
