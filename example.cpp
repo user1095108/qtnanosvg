@@ -9,11 +9,10 @@ int main(int argc, char* argv[])
   QGuiApplication app(argc, argv);
 
   //
-  QScopedPointer<QQmlEngine> engine(new QQmlEngine);
+  QQmlApplicationEngine engine;
+  engine.addImageProvider(QStringLiteral("svg"), new SVGImageProvider);
 
-  engine->addImageProvider(QStringLiteral("svg"), new SVGImageProvider);
+  engine.load(QStringLiteral("qrc:///Main.qml"));
 
-  QQmlComponent c(engine.get(), QStringLiteral("qrc:///Main.qml"));
-
-  return c.create() ? app.exec() : (qDebug() << c.errors(), EXIT_FAILURE);
+  return app.exec();
 }
