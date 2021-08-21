@@ -1,7 +1,7 @@
 TEMPLATE = app
 
 CONFIG += no_lflags_merge exceptions_off stl thread warn_on c++latest strict_c++ qt qtquickcompiler
-CONFIG -= c++11 c++14 exceptions
+CONFIG -= exceptions
 
 QT += qml quick
 
