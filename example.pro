@@ -26,8 +26,8 @@ SOURCES += qtnanosvg.cpp \
   unix:QMAKE_CXXFLAGS_DEBUG *= -fsanitize=address,undefined
   unix:QMAKE_LFLAGS_DEBUG *= -fsanitize=address,undefined
 
-  QMAKE_CFLAGS_RELEASE *= -DNDEBUG
-  QMAKE_CXXFLAGS_RELEASE *= -Ofast -DNDEBUG
+  QMAKE_CFLAGS_RELEASE *= -Ofast -DNDEBUG
+  QMAKE_CXXFLAGS_RELEASE *= -Ofast -DNDEBUG -fno-stack-protector -fno-plt
 
   QMAKE_LFLAGS *= -fno-stack-protector -fuse-ld=gold
 }
