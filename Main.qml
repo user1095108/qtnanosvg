@@ -12,8 +12,8 @@ ApplicationWindow {
 
       source: "image://svg/:/tiger.svg"
       sourceSize: {
-        const min = Math.min(parent.width, parent.height)
-        return Qt.size(min, min)
+        const wh = Math.min(parent.width, parent.height)
+        return Qt.size(wh, wh)
       }
     }
 
