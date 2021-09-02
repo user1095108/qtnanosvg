@@ -4,6 +4,9 @@ import QtQuick.Controls 2.15
 ApplicationWindow {
   id: window
 
+  width: 700
+  height: 700
+
   background: Image {
       anchors.centerIn: parent
 
@@ -46,5 +49,14 @@ ApplicationWindow {
 
       onClicked: window.close()
     }
+  }
+
+  Image {
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+
+    source: "image://svg/:/velocimetro3.svg"
+
+    sourceSize: Qt.size(150, 150)
   }
 }

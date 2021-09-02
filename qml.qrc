@@ -3,6 +3,7 @@
   <file>tick.svg</file>
   <file>cross.svg</file>
   <file>tiger.svg</file>
+  <file>velocimetro3.svg</file>
   <file>Main.qml</file>
 </qresource>
 </RCC>
