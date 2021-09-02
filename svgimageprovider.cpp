@@ -27,7 +27,7 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* sz,
       QByteArray ba;
       ba.resize(sz + 1);
 
-      if (sz == f.read(ba.data(), sz))
+      if (f.read(ba.data(), sz) == sz)
       {
         ba.back() = {};
 
