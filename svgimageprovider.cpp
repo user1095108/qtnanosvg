@@ -31,7 +31,7 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* sz,
       {
         ba.back() = {};
 
-        if (auto const nsi(nsvgParse(ba.data(), "dpi", 96)); nsi)
+        if (auto const nsi(nsvgParse(ba.data(), "px", 96)); nsi)
         {
           pixmap.fill(Qt::transparent);
 
