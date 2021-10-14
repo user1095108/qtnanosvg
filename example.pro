@@ -19,11 +19,11 @@ SOURCES += qtnanosvg.cpp \
            svgimageprovider.cpp \
            example.cpp
 
-*-g++*:unix {
+unix:*-g++* {
   QMAKE_CFLAGS = -pedantic -Wall -Wextra -fno-stack-protector -fno-plt
 
-  unix:QMAKE_CXXFLAGS_DEBUG *= -fsanitize=address,undefined
-  unix:QMAKE_LFLAGS_DEBUG *= -fsanitize=address,undefined
+  QMAKE_CXXFLAGS_DEBUG *= -fsanitize=address,undefined
+  QMAKE_LFLAGS_DEBUG *= -fsanitize=address,undefined
 
   QMAKE_CFLAGS_RELEASE *= -Ofast -DNDEBUG
   QMAKE_CXXFLAGS_RELEASE *= -Ofast -DNDEBUG -fno-stack-protector -fno-plt
