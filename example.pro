@@ -1,7 +1,6 @@
 TEMPLATE = app
 
 CONFIG += no_lflags_merge exceptions_off stl thread warn_on c++latest strict_c++ qt qtquickcompiler
-CONFIG -= exceptions
 
 QT += qml quick
 
@@ -20,7 +19,7 @@ SOURCES += qtnanosvg.cpp \
            svgimageprovider.cpp \
            example.cpp
 
-*-g++* {
+*-g++*:unix {
   QMAKE_CFLAGS = -pedantic -Wall -Wextra -fno-stack-protector -fno-plt
 
   unix:QMAKE_CXXFLAGS_DEBUG *= -fsanitize=address,undefined
