@@ -263,10 +263,11 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
   {
     auto const sm(qMin(w / image->width, h / image->height));
 
+    p->translate(
+      qreal(.5) * (w - sm * image->width),
+      qreal(.5) * (h - sm * image->height)
+    );
     p->scale(sm, sm);
-
-    p->translate(qreal(.5) * (w - sm * image->width),
-      qreal(.5) * (h - sm * image->height));
   }
 
   // draw shapes
@@ -286,10 +287,11 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
   {
     auto const sm(qMin(w / image->width, h / image->height));
 
+    p->translate(
+      x + qreal(.5) * (w - sm * image->width),
+      y + qreal(.5) * (h - sm * image->height)
+    );
     p->scale(sm, sm);
-
-    p->translate(x + qreal(.5) * (w - sm * image->width),
-      y + qreal(.5) * (h - sm * image->height));
   }
 
   // draw shapes
