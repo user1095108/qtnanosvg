@@ -163,7 +163,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
             rgr.setCenterRadius(0);
 
             rgr.setFocalPoint(t[4], t[5]);
-            rgr.setFocalRadius(-r);
+            rgr.setFocalRadius(t[0]);
 
             fillWithGradient(rgr);
 
