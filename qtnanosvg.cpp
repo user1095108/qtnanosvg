@@ -302,6 +302,7 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
       x + qreal(.5) * (w - sm * image->width),
       y + qreal(.5) * (h - sm * image->height)
     );
+
     p->scale(sm, sm);
   }
 
