@@ -15,13 +15,18 @@
 #include "qtnanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-template <std::size_t N = 4>
-constexpr auto to_rgba(unsigned int const c) noexcept
-{ // ABGR -> [R, G, B, A]
-  return [c]<auto ...I>(std::index_sequence<I...>) noexcept
+inline auto toQColor(unsigned int const c, auto const o) noexcept
+{
+  return [&]<auto ...I>(std::index_sequence<I...>) noexcept
     {
-      return std::array<quint8, N>{quint8(c >> CHAR_BIT * I)...};
-    }(std::make_index_sequence<N>());
+      return QColor(
+        (
+          I == 3 ?
+            qRound(o * quint8(c >> CHAR_BIT * I)) :
+            quint8(c >> CHAR_BIT * I)
+        )...
+      );
+    }(std::make_index_sequence<4>());
 }
 
 inline auto inverse(float const* const t) noexcept
@@ -120,11 +125,9 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
             {
               auto& stop(g.stops[i]);
 
-              auto const c(to_rgba(stop.color));
-
               gr.setColorAt(
                 stop.offset,
-                {c[0], c[1], c[2], qRound(shape->opacity * c[3])}
+                toQColor(stop.color, shape->opacity)
               );
             }
           }
@@ -136,16 +139,9 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
       switch (type)
       {
         case NSVG_PAINT_COLOR:
-          {
-            auto const c(to_rgba(shape->fill.color));
+          p->fillPath(qpath, toQColor(shape->fill.color, shape->opacity));
 
-            p->fillPath(
-              qpath,
-              QColor(c[0], c[1], c[2], qRound(shape->opacity * c[3]))
-            );
-
-            break;
-          }
+          break;
 
         case NSVG_PAINT_LINEAR_GRADIENT:
           {
@@ -200,9 +196,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 
     case NSVG_PAINT_COLOR:
       {
-        auto const c(to_rgba(shape->stroke.color));
-
-        QPen pen({c[0], c[1], c[2], qRound(shape->opacity * c[3])});
+        QPen pen(toQColor(shape->stroke.color, shape->opacity));
 
         pen.setWidthF(shape->strokeWidth);
 
