@@ -3,7 +3,10 @@
 #include <QLinearGradient>
 #include <QRadialGradient>
 
+#include <climits>
+
 #include <array>
+#include <utility>
 
 #define NANOSVG_ALL_COLOR_KEYWORDS
 #define NANOSVG_IMPLEMENTATION
@@ -12,11 +15,13 @@
 #include "qtnanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto to_rgba(unsigned int const c) noexcept
-{
-  return std::array<quint8, 4>{
-    quint8(c), quint8(c >> 8), quint8(c >> 16), quint8(c >> 24)
-  };
+template <std::size_t N = 4>
+constexpr auto to_rgba(unsigned int const c) noexcept
+{ // ABGR -> [R, G, B, A]
+  return [c]<auto ...I>(std::index_sequence<I...>) noexcept
+    {
+      return std::array<quint8, N>{quint8(c >> CHAR_BIT * I)...};
+    }(std::make_index_sequence<N>());
 }
 
 inline auto inverse(float const* const t) noexcept
@@ -116,8 +121,11 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
               auto& stop(g.stops[i]);
 
               auto const c(to_rgba(stop.color));
-              gr.setColorAt(stop.offset,
-                QColor(c[0], c[1], c[2], qRound(shape->opacity * c[3])));
+
+              gr.setColorAt(
+                stop.offset,
+                {c[0], c[1], c[2], qRound(shape->opacity * c[3])}
+              );
             }
           }
 
@@ -130,8 +138,11 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
         case NSVG_PAINT_COLOR:
           {
             auto const c(to_rgba(shape->fill.color));
-            p->fillPath(qpath,
-              QColor(c[0], c[1], c[2], qRound(shape->opacity * c[3])));
+
+            p->fillPath(
+              qpath,
+              QColor(c[0], c[1], c[2], qRound(shape->opacity * c[3]))
+            );
 
             break;
           }
@@ -143,7 +154,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
             auto const t(inverse(shape->fill.gradient->xform));
 
             lgr.setStart(t[4], t[5]);
-            lgr.setFinalStop(t[4] + t[2], t[5] + t[3]);
+            lgr.setFinalStop(t[2] + t[4], t[3] + t[5]);
 
             fillWithGradient(lgr);
 
@@ -191,7 +202,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
       {
         auto const c(to_rgba(shape->stroke.color));
 
-        QPen pen(QColor(c[0], c[1], c[2], qRound(shape->opacity * c[3])));
+        QPen pen({c[0], c[1], c[2], qRound(shape->opacity * c[3])});
 
         pen.setWidthF(shape->strokeWidth);
 
@@ -259,7 +270,6 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
   qreal const w, qreal const h)
 {
-  // preserve aspect ratio
   {
     auto const sm(qMin(w / image->width, h / image->height));
 
@@ -267,6 +277,7 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
       qreal(.5) * (w - sm * image->width),
       qreal(.5) * (h - sm * image->height)
     );
+
     p->scale(sm, sm);
   }
 
