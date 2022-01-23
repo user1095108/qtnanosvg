@@ -123,12 +123,9 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 
             for (decltype(g.nstops) i{}; ns != i; ++i)
             {
-              auto& stop(g.stops[i]);
+              auto& stp(g.stops[i]);
 
-              gr.setColorAt(
-                stop.offset,
-                toQColor(stop.color, shape->opacity)
-              );
+              gr.setColorAt(stp.offset, toQColor(stp.color, shape->opacity));
             }
           }
 
@@ -309,5 +306,6 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
     }
   }
 
+  //
   p->restore();
 }
