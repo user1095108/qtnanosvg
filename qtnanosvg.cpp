@@ -15,7 +15,7 @@
 #include "qtnanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto toQColor(unsigned int const c, auto const o) noexcept
+inline auto toQColor(auto const c, auto const o) noexcept
 {
   return [&]<auto ...I>(std::index_sequence<I...>) noexcept
     {
