@@ -5,7 +5,6 @@
 
 #include <climits>
 
-#include <array>
 #include <utility>
 
 #define NANOSVG_ALL_COLOR_KEYWORDS
