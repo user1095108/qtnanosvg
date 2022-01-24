@@ -200,8 +200,12 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
         if (auto const count(shape->strokeDashCount); count)
         {
           pen.setDashOffset(shape->strokeDashOffset);
-          pen.setDashPattern(QVector<qreal>(shape->strokeDashArray,
-            shape->strokeDashArray + count));
+          pen.setDashPattern(
+            {
+              shape->strokeDashArray,
+              shape->strokeDashArray + count
+            }
+          );
         }
 
         switch (shape->strokeLineCap)
