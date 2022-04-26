@@ -14,6 +14,18 @@
 #include "qtnanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
+inline auto inverse(float const* const t) noexcept
+{
+  auto const invdet(qreal(1) / (qreal(t[0]) * t[3] - qreal(t[2]) * t[1]));
+
+  return std::array<qreal, 6>{
+    t[3] * invdet, -t[1] * invdet,
+    -t[2] * invdet, t[0] * invdet,
+    (qreal(t[2]) * t[5] - qreal(t[3]) * t[4]) * invdet,
+    (qreal(t[1]) * t[4] - qreal(t[0]) * t[5]) * invdet
+  };
+}
+
 inline auto toQColor(auto const c, auto const o) noexcept
 {
   return [&]<auto ...I>(std::index_sequence<I...>) noexcept -> QColor
@@ -26,18 +38,6 @@ inline auto toQColor(auto const c, auto const o) noexcept
         )...
       };
     }(std::make_index_sequence<4>());
-}
-
-inline auto inverse(float const* const t) noexcept
-{
-  auto const invdet(qreal(1) / (qreal(t[0]) * t[3] - qreal(t[2]) * t[1]));
-
-  return std::array<qreal, 6>{
-    t[3] * invdet, -t[1] * invdet,
-    -t[2] * invdet, t[0] * invdet,
-    (qreal(t[2]) * t[5] - qreal(t[3]) * t[4]) * invdet,
-    (qreal(t[1]) * t[4] - qreal(t[0]) * t[5]) * invdet
-  };
 }
 
 //////////////////////////////////////////////////////////////////////////////
