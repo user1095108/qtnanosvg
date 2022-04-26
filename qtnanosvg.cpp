@@ -16,15 +16,15 @@
 //////////////////////////////////////////////////////////////////////////////
 inline auto toQColor(auto const c, auto const o) noexcept
 {
-  return [&]<auto ...I>(std::index_sequence<I...>) noexcept
+  return [&]<auto ...I>(std::index_sequence<I...>) noexcept -> QColor
     {
-      return QColor(
+      return {
         (
           I == 3 ?
             qRound(o * quint8(c >> CHAR_BIT * I)) :
             quint8(c >> CHAR_BIT * I)
         )...
-      );
+      };
     }(std::make_index_sequence<4>());
 }
 
