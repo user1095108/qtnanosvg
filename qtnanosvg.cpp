@@ -18,19 +18,17 @@ inline auto inverse(float const* const f0) noexcept
 {
   auto const invdet(1.f / (f0[0] * f0[3] - f0[2] * f0[1]));
 
-  std::array<float, 6> f1{
+  std::array<float, 6> const f1{
     f0[3], -f0[1],
     -f0[2], f0[0],
     f0[2] * f0[5] - f0[3] * f0[4],
     f0[1] * f0[4] - f0[0] * f0[5]
   };
 
-  [&]<auto ...I>(std::index_sequence<I...>) noexcept
-  {
-    ((f1[I] *= invdet), ...);
-  }(std::make_index_sequence<6>());
-
-  return f1;
+  return [&]<auto ...I>(std::index_sequence<I...>) noexcept
+    {
+      return std::array<float, sizeof...(I)>{(f1[I] * invdet)...};
+    }(std::make_index_sequence<6>());
 }
 
 inline auto toQColor(auto const c, auto const o) noexcept

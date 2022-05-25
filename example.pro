@@ -21,13 +21,11 @@ SOURCES += qtnanosvg.cpp \
            example.cpp
 
 *-g++* {
-  QMAKE_CFLAGS = -pedantic -Wall -Wextra -fno-stack-protector -fno-plt
-
   QMAKE_CXXFLAGS_DEBUG *= -fsanitize=address,undefined
   QMAKE_LFLAGS_DEBUG *= -fsanitize=address,undefined
 
-  QMAKE_CFLAGS_RELEASE *= -Ofast -DNDEBUG
-  QMAKE_CXXFLAGS_RELEASE *= -Ofast -DNDEBUG -fno-plt -fno-stack-protector -g
+  QMAKE_CFLAGS_RELEASE *= -march=native -Ofast -DNDEBUG
+  QMAKE_CXXFLAGS_RELEASE *= -march=native -Ofast -DNDEBUG -fno-plt -fno-stack-protector -g
 
   QMAKE_LFLAGS *= -fno-stack-protector -fuse-ld=gold
   QMAKE_LFLAGS_RELEASE -= -s
