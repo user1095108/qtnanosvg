@@ -5,6 +5,7 @@
 
 #include <climits>
 
+#include <execution>
 #include <utility>
 
 #define NANOSVG_ALL_COLOR_KEYWORDS
@@ -14,16 +15,26 @@
 #include "qtnanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto inverse(float const* const t) noexcept
+inline auto inverse(float const* const f0) noexcept
 {
-  auto const invdet(qreal(1) / (qreal(t[0]) * t[3] - qreal(t[2]) * t[1]));
+  auto const invdet(1.f / (f0[0] * f0[3] - f0[2] * f0[1]));
 
-  return std::array<qreal, 6>{
-    t[3] * invdet, -t[1] * invdet,
-    -t[2] * invdet, t[0] * invdet,
-    (qreal(t[2]) * t[5] - qreal(t[3]) * t[4]) * invdet,
-    (qreal(t[1]) * t[4] - qreal(t[0]) * t[5]) * invdet
+  std::array<float, 6> f1{
+    f0[3], -f0[1],
+    -f0[2], f0[0],
+    f0[2] * f0[5] - f0[3] * f0[4],
+    f0[1] * f0[4] - f0[0] * f0[5]
   };
+
+  std::transform(
+    std::execution::unseq,
+    f1.begin(),
+    f1.end(),
+    f1.begin(),
+    [&](auto const f) noexcept { return invdet * f; }
+  );
+
+  return f1;
 }
 
 inline auto toQColor(auto const c, auto const o) noexcept
