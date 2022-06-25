@@ -14,7 +14,7 @@ SVGImageProvider::SVGImageProvider():
 }
 
 //////////////////////////////////////////////////////////////////////////////
-QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* sz,
+QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
   QSize const& rs)
 {
   QPixmap pixmap(*sz = rs);
