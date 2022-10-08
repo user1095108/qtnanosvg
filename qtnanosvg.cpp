@@ -171,7 +171,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
           {
             QRadialGradient rgr;
 
-            auto& g(*shape->fill.gradient);
+            auto const& g(*shape->fill.gradient);
 
             auto const t(inverse(g.xform));
             auto const r(-t[0]);
