@@ -32,10 +32,12 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
         {
           pixmap.fill(Qt::transparent);
 
-          QPainter p(&pixmap);
-          p.setRenderHint(QPainter::Antialiasing, true);
+          {
+            QPainter p(&pixmap);
+            p.setRenderHint(QPainter::Antialiasing, true);
 
-          drawSVGImage(&p, nsi, rs.width(), rs.height());
+            drawSVGImage(&p, nsi, rs.width(), rs.height());
+          }
 
           nsvgDelete(nsi);
         }
