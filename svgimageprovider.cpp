@@ -17,7 +17,7 @@ SVGImageProvider::SVGImageProvider():
 QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
   QSize const& rs)
 {
-  QPixmap pixmap(*sz = rs);
+  QPixmap pm(*sz = rs);
 
   //
   if (QFile f(id); !rs.isEmpty() && f.open(QIODevice::ReadOnly))
@@ -30,10 +30,10 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 
         if (auto const nsi(nsvgParse(tmp, "px", 96)); nsi)
         {
-          pixmap.fill(Qt::transparent);
+          pm.fill(Qt::transparent);
 
           {
-            QPainter p(&pixmap);
+            QPainter p(&pm);
             p.setRenderHint(QPainter::Antialiasing, true);
 
             drawSVGImage(&p, nsi, rs.width(), rs.height());
@@ -45,5 +45,5 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
     }
   }
 
-  return pixmap;
+  return pm;
 }
