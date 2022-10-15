@@ -1,6 +1,5 @@
 #include <QFile>
 #include <QPainter>
-#include <QScopeGuard>
 
 #include "qtnanosvg.hpp"
 
@@ -25,23 +24,20 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
   {
     if (auto const sz(f.size()); sz)
     {
-      QByteArray ba;
-      ba.resize(sz + 1);
-
-      if (f.read(ba.data(), sz) == sz)
+      if (char tmp[sz]; f.read(tmp, sz) == sz)
       {
-        ba.back() = {};
+        tmp[sz - 1] = {};
 
-        if (auto const nsi(nsvgParse(ba.data(), "px", 96)); nsi)
+        if (auto const nsi(nsvgParse(tmp, "px", 96)); nsi)
         {
-          auto const cleanup{qScopeGuard([&]noexcept{nsvgDelete(nsi);})};
-
           pixmap.fill(Qt::transparent);
 
           QPainter p(&pixmap);
           p.setRenderHint(QPainter::Antialiasing, true);
 
           drawSVGImage(&p, nsi, rs.width(), rs.height());
+
+          nsvgDelete(nsi);
         }
       }
     }
