@@ -25,7 +25,7 @@ SOURCES += qtnanosvg.cpp \
   QMAKE_LFLAGS_DEBUG *= -fsanitize=address,undefined
 
   QMAKE_CFLAGS_RELEASE *= -march=native -Ofast -DNDEBUG
-  QMAKE_CXXFLAGS_RELEASE *= -march=native -Ofast -DNDEBUG -fno-plt -fno-stack-protector -g
+  QMAKE_CXXFLAGS_RELEASE *= -march=native -Ofast -DNDEBUG -DQT_NO_DEBUG_OUTPUT -fno-plt -fno-stack-protector -g
 
   QMAKE_LFLAGS *= -fno-stack-protector
   QMAKE_LFLAGS_RELEASE -= -s
