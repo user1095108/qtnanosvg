@@ -34,7 +34,7 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 
           {
             QPainter p(&pm);
-            p.setRenderHint(QPainter::Antialiasing, true);
+            p.setRenderHint(QPainter::Antialiasing);
 
             drawSVGImage(&p, nsi, rs.width(), rs.height());
           }
