@@ -13,5 +13,6 @@ int main(int argc, char* argv[])
   engine.addImageProvider(QStringLiteral("svg"), new SVGImageProvider);
   engine.load(QStringLiteral("qrc:///Main.qml"));
 
+  //
   return app.exec();
 }
