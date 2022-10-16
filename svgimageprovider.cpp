@@ -45,5 +45,6 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
     }
   }
 
+  //
   return pm;
 }
