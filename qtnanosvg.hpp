@@ -7,8 +7,8 @@
 class QPainter;
 struct NSVGimage;
 
-void drawSVGImage(QPainter*, struct NSVGimage*, qreal, qreal);
-void drawSVGImage(QPainter*, struct NSVGimage*, qreal, qreal,
+void drawSVGImage(QPainter*, struct NSVGimage const*, qreal, qreal);
+void drawSVGImage(QPainter*, struct NSVGimage const*, qreal, qreal,
   qreal, qreal);
 
 #endif // QTNANOSVG_HPP

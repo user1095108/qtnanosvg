@@ -55,7 +55,8 @@ inline auto toQColor(quint32 const c, float const o) noexcept
 }
 
 //////////////////////////////////////////////////////////////////////////////
-inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
+inline void drawSVGShape(QPainter* const p,
+  struct NSVGshape const* const shape)
 {
   QPainterPath qpath;
 
@@ -77,10 +78,8 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
     if (path->closed) qpath.closeSubpath();
   }
 
-  auto const& shp(*shape);
-
   // fill
-  switch (auto const type(shp.fill.type); type)
+  switch (auto const type(shape->fill.type); type)
   {
     case NSVG_PAINT_NONE:
       break;
@@ -89,7 +88,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
     case NSVG_PAINT_LINEAR_GRADIENT:
     case NSVG_PAINT_RADIAL_GRADIENT:
     {
-      switch (shp.fillRule)
+      switch (shape->fillRule)
       {
         case NSVG_FILLRULE_NONZERO:
           qpath.setFillRule(Qt::WindingFill);
@@ -107,7 +106,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 
       auto const fillWithGradient([&](QGradient& gr)
         {
-          auto const& g(*shp.fill.gradient);
+          auto const& g(*shape->fill.gradient);
 
           switch (g.spread)
           {
@@ -137,7 +136,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
             {
               auto const& stp(g.stops[i]);
 
-              gr.setColorAt(stp.offset, toQColor(stp.color, shp.opacity));
+              gr.setColorAt(stp.offset, toQColor(stp.color, shape->opacity));
             }
           }
 
@@ -148,7 +147,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
       switch (type)
       {
         case NSVG_PAINT_COLOR:
-          p->fillPath(qpath, toQColor(shp.fill.color, shp.opacity));
+          p->fillPath(qpath, toQColor(shape->fill.color, shape->opacity));
 
           break;
 
@@ -156,7 +155,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
           {
             QLinearGradient lgr;
 
-            auto const t(inverse(shp.fill.gradient->xform));
+            auto const t(inverse(shape->fill.gradient->xform));
 
             lgr.setStart(t[4], t[5]);
             lgr.setFinalStop(t[2] + t[4], t[3] + t[5]);
@@ -170,7 +169,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
           {
             QRadialGradient rgr;
 
-            auto const& g(*shp.fill.gradient);
+            auto const& g(*shape->fill.gradient);
 
             auto const t(inverse(g.xform));
             auto const r(-t[0]);
@@ -198,29 +197,29 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
   }
 
   // stroke
-  switch (shp.stroke.type)
+  switch (shape->stroke.type)
   {
     case NSVG_PAINT_NONE:
       break;
 
     case NSVG_PAINT_COLOR:
       {
-        QPen pen(toQColor(shp.stroke.color, shp.opacity));
+        QPen pen(toQColor(shape->stroke.color, shape->opacity));
 
-        pen.setWidthF(shp.strokeWidth);
+        pen.setWidthF(shape->strokeWidth);
 
-        if (auto const count(shp.strokeDashCount); count)
+        if (auto const count(shape->strokeDashCount); count)
         {
-          pen.setDashOffset(shp.strokeDashOffset);
+          pen.setDashOffset(shape->strokeDashOffset);
           pen.setDashPattern(
             {
-              shp.strokeDashArray,
-              shp.strokeDashArray + count
+              shape->strokeDashArray,
+              shape->strokeDashArray + count
             }
           );
         }
 
-        switch (shp.strokeLineCap)
+        switch (shape->strokeLineCap)
         {
           case NSVG_CAP_BUTT:
             pen.setCapStyle(Qt::FlatCap);
@@ -241,7 +240,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
             Q_ASSERT(0);
         }
 
-        switch (shp.strokeLineJoin)
+        switch (shape->strokeLineJoin)
         {
           case NSVG_JOIN_BEVEL:
             pen.setJoinStyle(Qt::BevelJoin);
@@ -250,7 +249,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 
           case NSVG_JOIN_MITER:
             pen.setJoinStyle(Qt::SvgMiterJoin);
-            pen.setMiterLimit(shp.miterLimit);
+            pen.setMiterLimit(shape->miterLimit);
 
             break;
 
@@ -274,7 +273,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
+void drawSVGImage(QPainter* const p, struct NSVGimage const* const image,
   qreal const w, qreal const h)
 {
   {
@@ -296,7 +295,7 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
+void drawSVGImage(QPainter* const p, struct NSVGimage const* const image,
   qreal const x, qreal const y, qreal const w, qreal const h)
 {
   p->save();
@@ -316,10 +315,7 @@ void drawSVGImage(QPainter* const p, struct NSVGimage* const image,
   // draw shapes
   for (auto shape(image->shapes); shape; shape = shape->next)
   {
-    if (NSVG_FLAGS_VISIBLE & shape->flags)
-    {
-      drawSVGShape(p, shape);
-    }
+    if (NSVG_FLAGS_VISIBLE & shape->flags) drawSVGShape(p, shape);
   }
 
   //
