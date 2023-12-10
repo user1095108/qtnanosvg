@@ -45,12 +45,12 @@ inline auto toQColor(quint32 const c, float const o) noexcept
   return [&]<auto ...I>(std::index_sequence<I...>) noexcept -> QColor
     {
       return {
-        (
-          I == 3 ?
-            qRound(o * quint8(c >> CHAR_BIT * I)) :
-            quint8(c >> CHAR_BIT * I)
-        )...
-      };
+          (
+            I == 3 ?
+              qRound(o * quint8(c >> CHAR_BIT * I)) :
+              quint8(c >> CHAR_BIT * I)
+          )...
+        };
     }(std::make_index_sequence<4>());
 }
 
