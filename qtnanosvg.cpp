@@ -74,14 +74,13 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
       }
     }
 
-    if (path->closed)
-    {
-      qpath.closeSubpath();
-    }
+    if (path->closed) qpath.closeSubpath();
   }
 
+  auto const& shp(*shape);
+
   // fill
-  switch (auto const type(shape->fill.type); type)
+  switch (auto const type(shp.fill.type); type)
   {
     case NSVG_PAINT_NONE:
       break;
@@ -90,7 +89,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
     case NSVG_PAINT_LINEAR_GRADIENT:
     case NSVG_PAINT_RADIAL_GRADIENT:
     {
-      switch (shape->fillRule)
+      switch (shp.fillRule)
       {
         case NSVG_FILLRULE_NONZERO:
           qpath.setFillRule(Qt::WindingFill);
@@ -108,7 +107,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 
       auto const fillWithGradient([&](QGradient& gr)
         {
-          auto& g(*shape->fill.gradient);
+          auto const& g(*shp.fill.gradient);
 
           switch (g.spread)
           {
@@ -136,9 +135,9 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 
             for (decltype(g.nstops) i{}; ns != i; ++i)
             {
-              auto& stp(g.stops[i]);
+              auto const& stp(g.stops[i]);
 
-              gr.setColorAt(stp.offset, toQColor(stp.color, shape->opacity));
+              gr.setColorAt(stp.offset, toQColor(stp.color, shp.opacity));
             }
           }
 
@@ -149,7 +148,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
       switch (type)
       {
         case NSVG_PAINT_COLOR:
-          p->fillPath(qpath, toQColor(shape->fill.color, shape->opacity));
+          p->fillPath(qpath, toQColor(shp.fill.color, shp.opacity));
 
           break;
 
@@ -157,7 +156,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
           {
             QLinearGradient lgr;
 
-            auto const t(inverse(shape->fill.gradient->xform));
+            auto const t(inverse(shp.fill.gradient->xform));
 
             lgr.setStart(t[4], t[5]);
             lgr.setFinalStop(t[2] + t[4], t[3] + t[5]);
@@ -171,7 +170,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
           {
             QRadialGradient rgr;
 
-            auto const& g(*shape->fill.gradient);
+            auto const& g(*shp.fill.gradient);
 
             auto const t(inverse(g.xform));
             auto const r(-t[0]);
@@ -199,29 +198,29 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
   }
 
   // stroke
-  switch (shape->stroke.type)
+  switch (shp.stroke.type)
   {
     case NSVG_PAINT_NONE:
       break;
 
     case NSVG_PAINT_COLOR:
       {
-        QPen pen(toQColor(shape->stroke.color, shape->opacity));
+        QPen pen(toQColor(shp.stroke.color, shp.opacity));
 
-        pen.setWidthF(shape->strokeWidth);
+        pen.setWidthF(shp.strokeWidth);
 
-        if (auto const count(shape->strokeDashCount); count)
+        if (auto const count(shp.strokeDashCount); count)
         {
-          pen.setDashOffset(shape->strokeDashOffset);
+          pen.setDashOffset(shp.strokeDashOffset);
           pen.setDashPattern(
             {
-              shape->strokeDashArray,
-              shape->strokeDashArray + count
+              shp.strokeDashArray,
+              shp.strokeDashArray + count
             }
           );
         }
 
-        switch (shape->strokeLineCap)
+        switch (shp.strokeLineCap)
         {
           case NSVG_CAP_BUTT:
             pen.setCapStyle(Qt::FlatCap);
@@ -242,7 +241,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
             Q_ASSERT(0);
         }
 
-        switch (shape->strokeLineJoin)
+        switch (shp.strokeLineJoin)
         {
           case NSVG_JOIN_BEVEL:
             pen.setJoinStyle(Qt::BevelJoin);
@@ -251,7 +250,7 @@ inline void drawSVGShape(QPainter* const p, struct NSVGshape* const shape)
 
           case NSVG_JOIN_MITER:
             pen.setJoinStyle(Qt::SvgMiterJoin);
-            pen.setMiterLimit(shape->miterLimit);
+            pen.setMiterLimit(shp.miterLimit);
 
             break;
 
