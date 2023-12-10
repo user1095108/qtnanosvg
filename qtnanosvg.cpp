@@ -40,7 +40,7 @@ inline auto inverse(float const* const f0) noexcept
   return f1;
 }
 
-inline auto toQColor(auto const c, auto const o) noexcept
+inline auto toQColor(quint32 const c, float const o) noexcept
 {
   return [&]<auto ...I>(std::index_sequence<I...>) noexcept -> QColor
     {
