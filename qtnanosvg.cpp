@@ -41,18 +41,12 @@ inline auto inverse(float const* const f0) noexcept
   return f1;
 }
 
-inline auto toQColor(quint32 const c, float const o) noexcept
+inline auto toQColor(quint32 c, float const o) noexcept
 {
-  return [&]<auto ...I>(auto const c, std::index_sequence<I...>) noexcept
-    {
-      return QColor{
-          int(
-            I == 3 ?
-              qRound(o * quint8(c >> CHAR_BIT * I)) :
-              quint8(c >> CHAR_BIT * I)
-          )...
-        };
-    }(qFromLittleEndian(c), std::make_index_sequence<4>());
+  c = qFromLittleEndian(c);
+
+  return QColor(quint8(c), quint8(c >> 8), quint8(c >> 16),
+    qRound(quint8(c >> 24) * o));
 }
 
 //////////////////////////////////////////////////////////////////////////////
