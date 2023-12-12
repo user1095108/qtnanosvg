@@ -19,7 +19,6 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 {
   QPixmap pm(*sz = rs);
 
-  //
   if (!pm.isNull())
   {
     QFile f(id);
@@ -45,6 +44,5 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
     }
   }
 
-  //
   return pm;
 }
