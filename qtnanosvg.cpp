@@ -41,12 +41,15 @@ inline auto inverse(float const* const f0) noexcept
   return f1;
 }
 
-inline auto toQColor(quint32 c, float const o) noexcept
+inline auto toQColor(quint32 const c, float const o) noexcept
 {
-  c = qFromLittleEndian(c);
-
+#if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
   return QColor(quint8(c), quint8(c >> 8), quint8(c >> 16),
     qRound(quint8(c >> 24) * o));
+#else
+  return QColor(quint8(c >> 24), quint8(c >> 16), quint8(c >> 8),
+    qRound(quint8(c) * o));
+#endif // Q_BYTE_ORDER
 }
 
 //////////////////////////////////////////////////////////////////////////////
