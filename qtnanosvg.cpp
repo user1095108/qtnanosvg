@@ -1,4 +1,4 @@
-#include <QtEndian>
+#include <QtGlobal>
 #include <QPainter>
 #include <QPainterPath>
 #include <QLinearGradient>
