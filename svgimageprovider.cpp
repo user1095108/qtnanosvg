@@ -20,17 +20,15 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
   QPixmap pm(*sz = rs);
 
   //
-  if (!rs.isEmpty())
+  if (!pm.isNull())
   {
     QFile f(id);
 
     if (auto const sz(f.size()); (sz > 0) && f.open(QIODevice::ReadOnly))
     {
-      if (char tmp[sz + 1]; f.read(tmp, sz) == sz)
+      if (QByteArray dat(sz, Qt::Uninitialized); f.read(dat.data(), sz) == sz)
       {
-        tmp[sz] = {};
-
-        if (auto const nsi(nsvgParse(tmp, "px", 96)); nsi)
+        if (auto const nsi(nsvgParse(dat.data(), "px", 96)); nsi)
         {
           pm.fill(Qt::transparent);
 
