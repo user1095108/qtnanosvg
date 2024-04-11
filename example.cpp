@@ -9,9 +9,9 @@ int main(int argc, char* argv[])
   QGuiApplication app(argc, argv);
 
   //
-  QQmlApplicationEngine engine;
-  engine.addImageProvider(QStringLiteral("svg"), new SVGImageProvider);
-  engine.load(QStringLiteral("qrc:///Main.qml"));
+  QQmlApplicationEngine eng;
+  eng.addImageProvider(QStringLiteral("svg"), new SVGImageProvider);
+  eng.load(QStringLiteral("qrc:///Main.qml"));
 
   //
   return app.exec();
