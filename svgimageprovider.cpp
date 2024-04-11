@@ -23,8 +23,7 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
   {
     QFile f(id);
 
-    if (auto dat((f.open(QIODevice::ReadOnly), f.readAll()));
-      f.size() == dat.size())
+    if (auto dat((f.open(QIODevice::ReadOnly), f.readAll())); !dat.isEmpty())
     {
       if (auto const nsi(nsvgParse(dat.data(), "px", 96)); nsi)
       {
