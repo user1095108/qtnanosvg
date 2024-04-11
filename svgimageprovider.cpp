@@ -23,23 +23,21 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
   {
     QFile f(id);
 
-    if (auto const sz(f.size()); (sz > 0) && f.open(QIODevice::ReadOnly))
+    if (auto dat((f.open(QIODevice::ReadOnly), f.readAll()));
+      f.size() == dat.size())
     {
-      if (QByteArray dat(sz, Qt::Uninitialized); f.read(dat.data(), sz) == sz)
+      if (auto const nsi(nsvgParse(dat.data(), "px", 96)); nsi)
       {
-        if (auto const nsi(nsvgParse(dat.data(), "px", 96)); nsi)
+        pm.fill(Qt::transparent);
+
         {
-          pm.fill(Qt::transparent);
+          QPainter p(&pm);
+          p.setRenderHint(QPainter::Antialiasing);
 
-          {
-            QPainter p(&pm);
-            p.setRenderHint(QPainter::Antialiasing);
-
-            drawSVGImage(&p, nsi, rs.width(), rs.height());
-          }
-
-          nsvgDelete(nsi);
+          drawSVGImage(&p, nsi, rs.width(), rs.height());
         }
+
+        nsvgDelete(nsi);
       }
     }
   }
