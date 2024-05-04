@@ -4,7 +4,10 @@ CONFIG += no_lflags_merge exceptions_off stl thread warn_on c++17 strict_c++ qt 
 
 QT += qml quick
 
-DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000\
+           TBB_USE_EXCEPTIONS=0\
+           _GLIBCXX_USE_TBB_PAR_BACKEND=0
+
 DEFINES +=                      \
   QT_USE_FAST_CONCATENATION     \
   QT_USE_FAST_OPERATOR_PLUS     \
