@@ -1,9 +1,8 @@
 #include <QFile>
 #include <QPainter>
 
-#include "qtnanosvg.hpp"
-
 #include "nanosvg/src/nanosvg.h"
+#include "qtnanosvg.hpp"
 
 #include "svgimageprovider.hpp"
 
