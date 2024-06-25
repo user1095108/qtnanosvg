@@ -1,3 +1,11 @@
+#if defined(_WIN32)
+# include <malloc.h>
+# define SIP_ALLOCA(x) _alloca(x)
+#else
+# include <stdlib.h>
+# define SIP_ALLOCA(x) alloca(x)
+#endif // SIP_ALLOCA
+
 #include <QFile>
 #include <QPainter>
 
@@ -24,7 +32,8 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
     {
       auto const fsz(f.size());
 
-      if (char dat[fsz + 1]; fsz == f.read(dat, fsz))
+      if (auto const dat(static_cast<char*>(SIP_ALLOCA(fsz + 1)));
+        fsz == f.read(dat, fsz))
       {
         dat[fsz] = {};
 
