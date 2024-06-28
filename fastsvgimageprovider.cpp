@@ -28,28 +28,30 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 
   if (!pm.isNull())
   {
+    char* dat{};
+
     if (QFile f(id); f.open(QIODevice::ReadOnly))
     {
       auto const fsz(f.size());
 
-      if (auto const dat(static_cast<char*>(SIP_ALLOCA(fsz + 1)));
-        fsz == f.read(dat, fsz))
+      fsz == f.read(dat = static_cast<char*>(SIP_ALLOCA(fsz + 1)), fsz) ?
+        dat[fsz] = {} : bool(dat = {});
+    }
+
+    if (dat)
+    {
+      if (auto const nsi(nsvgParse(dat, "px", 96)); nsi)
       {
-        dat[fsz] = {};
+        pm.fill(Qt::transparent);
 
-        if (auto const nsi(nsvgParse(dat, "px", 96)); nsi)
         {
-          pm.fill(Qt::transparent);
+          QPainter p(&pm);
+          p.setRenderHint(QPainter::Antialiasing);
 
-          {
-            QPainter p(&pm);
-            p.setRenderHint(QPainter::Antialiasing);
-
-            drawSVGImage(&p, nsi, rs.width(), rs.height());
-          }
-
-          nsvgDelete(nsi);
+          drawSVGImage(&p, nsi, rs.width(), rs.height());
         }
+
+        nsvgDelete(nsi);
       }
     }
   }
