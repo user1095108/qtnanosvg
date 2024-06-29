@@ -26,7 +26,7 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 {
   QPixmap pm(*sz = rs);
 
-  while (!pm.isNull())
+  do if(!pm.isNull())
   {
     char* dat;
 
@@ -51,9 +51,7 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 
       nsvgDelete(nsi);
     }
-
-    break;
-  }
+  } while (false);
 
   return pm;
 }
