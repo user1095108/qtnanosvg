@@ -27,8 +27,7 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
     {
       dat[f.size() - 1] = {};
 
-      if (auto const nsi(nsvgParse(
-        reinterpret_cast<char*>(dat), "px", 96)); nsi)
+      if (auto const nsi = nsvgParse(reinterpret_cast<char*>(dat), "px", 96))
       {
         pm.fill(Qt::transparent);
 
