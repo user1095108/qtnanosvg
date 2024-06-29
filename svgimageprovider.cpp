@@ -24,21 +24,19 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 
     if (QFile f(id); f.open(QIODevice::ReadOnly)) dat = f.readAll();
 
-    if (!dat.isEmpty())
+    if (NSVGimage* nsi;
+      !dat.isEmpty() && (nsi = nsvgParse(dat.data(), "px", 96)))
     {
-      if (auto const nsi(nsvgParse(dat.data(), "px", 96)); nsi)
+      pm.fill(Qt::transparent);
+
       {
-        pm.fill(Qt::transparent);
+        QPainter p(&pm);
+        p.setRenderHint(QPainter::Antialiasing);
 
-        {
-          QPainter p(&pm);
-          p.setRenderHint(QPainter::Antialiasing);
-
-          drawSVGImage(&p, nsi, rs.width(), rs.height());
-        }
-
-        nsvgDelete(nsi);
+        drawSVGImage(&p, nsi, rs.width(), rs.height());
       }
+
+      nsvgDelete(nsi);
     }
   }
 
