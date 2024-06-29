@@ -37,6 +37,7 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
       if (fsz == f.read(dat = static_cast<char*>(SIP_ALLOCA(fsz + 1)), fsz))
         dat[fsz] = {}; else break;
     }
+    else break;
 
     if (auto const nsi(nsvgParse(dat, "px", 96)); nsi)
     {
