@@ -18,28 +18,28 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 {
   QPixmap pm(*sz = rs);
 
-  if (!pm.isNull())
+  while (!pm.isNull())
   {
     QByteArray dat;
 
-    if (QFile f(id); f.open(QIODevice::ReadOnly)) dat = f.readAll();
+    if (QFile f(id);
+      f.open(QIODevice::ReadOnly)) dat = f.readAll(); else break;
 
-    if (!dat.isEmpty())
+    if (auto const nsi(nsvgParse(dat.data(), "px", 96)); nsi)
     {
-      if (auto const nsi(nsvgParse(dat.data(), "px", 96)); nsi)
+      pm.fill(Qt::transparent);
+
       {
-        pm.fill(Qt::transparent);
+        QPainter p(&pm);
+        p.setRenderHint(QPainter::Antialiasing);
 
-        {
-          QPainter p(&pm);
-          p.setRenderHint(QPainter::Antialiasing);
-
-          drawSVGImage(&p, nsi, rs.width(), rs.height());
-        }
-
-        nsvgDelete(nsi);
+        drawSVGImage(&p, nsi, rs.width(), rs.height());
       }
+
+      nsvgDelete(nsi);
     }
+
+    break;
   }
 
   return pm;
