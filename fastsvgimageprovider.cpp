@@ -32,9 +32,8 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 
     if (QFile f(id); f.open(QIODevice::ReadOnly))
     {
-      auto const fsz(f.size());
-
-      if (fsz == f.read(dat = static_cast<char*>(SIP_ALLOCA(fsz + 1)), fsz))
+      if (auto const fsz(f.size());
+        fsz == f.read(dat = static_cast<char*>(SIP_ALLOCA(fsz + 1)), fsz))
         dat[fsz] = {}; else break;
     }
     else break;
