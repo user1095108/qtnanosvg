@@ -40,8 +40,9 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
         }
 
         nsvgDelete(nsi);
-        f.unmap(dat);
       }
+
+      f.unmap(dat);
     }
   }
 
