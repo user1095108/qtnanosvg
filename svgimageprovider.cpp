@@ -24,8 +24,8 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 
     if (QFile f(id); f.open(QIODevice::ReadOnly)) dat = f.readAll();
 
-    if (NSVGimage* nsi;
-      !dat.isEmpty() && (nsi = nsvgParse(dat.data(), "px", 96)))
+    if (decltype(nsvgParse(dat.data(), "px", 96)) nsi; !dat.isEmpty() &&
+      (nsi = nsvgParse(dat.data(), "px", 96)))
     {
       pm.fill(Qt::transparent);
 
