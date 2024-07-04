@@ -21,11 +21,12 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
   if (!pm.isNull())
   {
     uchar* dat;
+    QFile f(id);
 
-    if (QFile f(id); f.open(QIODevice::ReadOnly) &&
-      (dat = f.map({}, f.size(), QFileDevice::MapPrivateOption)))
+    if (auto const fsz(f.size()); (fsz > 0) && f.open(QIODevice::ReadOnly) &&
+      (dat = f.map({}, fsz, QFileDevice::MapPrivateOption)))
     {
-      dat[f.size() - 1] = {};
+      dat[fsz - 1] = {};
 
       if (auto const nsi = nsvgParse(reinterpret_cast<char*>(dat), "px", 96))
       {
