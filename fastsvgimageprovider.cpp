@@ -26,7 +26,7 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 {
   QPixmap pm(*sz = rs);
 
-  do if(!pm.isNull())
+  do if (!pm.isNull())
   {
     char* dat;
 
