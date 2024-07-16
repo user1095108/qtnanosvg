@@ -18,13 +18,11 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 {
   QPixmap pm(*sz = rs);
 
-  do if (!pm.isNull())
+  if (!pm.isNull())
   {
     if (QFile f(id); f.open(QIODevice::ReadOnly))
     {
       auto const fsz(f.size());
-
-      if (0 >= fsz) break;
 
       if (char dat[fsz + 1]; fsz == f.read(dat, fsz))
       {
@@ -45,7 +43,7 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
         }
       }
     }
-  } while (false);
+  }
 
   return pm;
 }
