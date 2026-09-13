@@ -1,6 +1,5 @@
 #include <QFile>
 #include <QPainter>
-#include <QVarLengthArray>
 
 #include "nanosvg/src/nanosvg.h"
 #include "qtnanosvg.hpp"
@@ -19,33 +18,27 @@ QPixmap SVGImageProvider::requestPixmap(QString const& id, QSize* const sz,
 {
   QPixmap pm(*sz = rs);
 
-  if (!pm.isNull())
+  do if (!pm.isNull())
   {
+    QByteArray dat;
+
     if (QFile f(id); f.open(QIODevice::ReadOnly))
+      { if ((dat = f.readAll()).isEmpty()) break; } else break;
+
+    if (auto const nsi = nsvgParse(dat.data(), "px", 96))
     {
-      auto const fsz(f.size());
+      pm.fill(Qt::transparent);
 
-      if (QVarLengthArray<char, 16384> dat(fsz + 1);
-        fsz == f.read(dat.data(), fsz))
       {
-        dat.back() = {};
+        QPainter p(&pm);
+        p.setRenderHint(QPainter::Antialiasing);
 
-        if (auto const nsi(nsvgParse(dat.data(), "px", 96)); nsi)
-        {
-          pm.fill(Qt::transparent);
-
-          {
-            QPainter p(&pm);
-            p.setRenderHint(QPainter::Antialiasing);
-
-            drawSVGImage(&p, nsi, rs.width(), rs.height());
-          }
-
-          nsvgDelete(nsi);
-        }
+        drawSVGImage(&p, nsi, rs.width(), rs.height());
       }
+
+      nsvgDelete(nsi);
     }
-  }
+  } while (false);
 
   return pm;
 }
